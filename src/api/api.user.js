@@ -1,9 +1,11 @@
-import * as api from "./api.js";
+import * as api from "./api";
+
+import { zxcvbn } from "./zxcvbnConfig.js";
 
 // Contraseñas demasiado comunes (se comparan en minúsculas)
 const PASSWORDS_INSEGURAS = [
-  "12345",
-  "qwerty",
+  "12345678",
+  "qwertyui",
   "12345678",
   "abcdefgh",
   "0987654321",
@@ -14,30 +16,26 @@ const PASSWORDS_INSEGURAS = [
 // Valida una contraseña NUEVA. Devuelve { ok, error }
 // (mismo formato que la API, así el resto del código lo trata igual)
 function validarPassword(password) {
-  if (typeof password !== "string") {
+  if (password.length < 8 || password.length > 30) {
     return {
-      ok: false,
-      error: "Error 400: Invalid Password. ERR_400_PASSWORD_INPUT_NOT_STRING",
+      valido: false,
+      mensaje: "La contraseña debe tener entre 8 y 30 caracteres",
     };
   }
 
-  const longitud = [...password].length;
-  if (longitud < 8 || longitud > 30) {
-    return {
-      ok: false,
-      error:
-        "Error 400: La contraseña debe tener un mínimo de 8 caracteres y un máximo de 30",
-    };
+  const resultado = zxcvbn.check(password);
+
+  if (resultado.score < 2) {
+    const sugerencia =
+      resultado.feedback.warning ||
+      resultado.feedback.suggestions[0] ||
+      "Elige una contraseña más segura";
+    return { ok: false, error: sugerencia };
   }
 
-  if (PASSWORDS_INSEGURAS.includes(password.toLowerCase())) {
-    return {
-      ok: false,
-      error: "Error 400: La contraseña es muy insegura, escoge otra",
-    };
-  }
-
-  return { ok: true, error: null };
+  return resultado.feedback.warning === null
+    ? { ok: true, error: null }
+    : { ok: true, error: resultado.feedback.warning };
 }
 
 // Todos los métodos son async y devuelven { ok, data } o { ok, error }

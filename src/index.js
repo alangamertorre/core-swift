@@ -26,13 +26,12 @@ import { descargar } from "./api/api";
 import "./api/api.user";
 import "./api/api.productos";
 
+//Modules Config
+import "./api/zxcvbnConfig";
+
 //Tester
 import reportWebVitals from "./reportWebVitals";
 import { apiStatusTest } from "./api/api.test";
-
-//Global variables
-window.user = { user: "Unknow", email: "null", name: "Unknow" };
-window.logIn = false;
 
 //DOM
 const navbarElements = document.querySelectorAll(".navbar-jsx");
@@ -46,13 +45,6 @@ const heroSoporte = document.querySelectorAll(".hero-soporte-jsx");
 const featuresSoporte = document.querySelectorAll(".features-soporte-jsx");
 const heroNoticias = document.querySelectorAll(".hero-noticias-jsx");
 const featuresNoticias = document.querySelectorAll(".features-noticias-jsx");
-
-//User nav menu
-const userNavUsername = document.querySelectorAll(".user-system-menu-name");
-const userNavEmail = document.querySelectorAll(".user-system-menu-email");
-
-userNavUsername.forEach((e) => (e.textContent = window.user[0]));
-userNavEmail.forEach((e) => (e.textContent = window.user[1]));
 
 //Essential elements
 navbarElements.forEach((element) => {
