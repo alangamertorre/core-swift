@@ -39,6 +39,27 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
+## Autenticación
+
+El inicio de sesión y el registro con nombre de usuario se conectan al endpoint
+`managerUser` del backend. La sesión de esas cuentas se mantiene solo en memoria:
+al recargar la página hay que volver a iniciar sesión. La contraseña no se guarda
+en el navegador. Google OAuth también mantiene la sesión solo en memoria; el
+verificador temporal de PKCE se guarda en `sessionStorage` para completar el
+retorno de OAuth y se limita a la pestaña actual.
+
+Para activar el acceso con Google, crea `.env.local` en la raíz del proyecto y
+define las credenciales públicas del proyecto Supabase:
+
+```text
+REACT_APP_SUPABASE_URL=https://<project-ref>.supabase.co
+REACT_APP_SUPABASE_ANON_KEY=<publishable-or-anon-key>
+```
+
+Habilita Google como proveedor OAuth en Supabase y configura las URL de retorno
+permitidas para los entornos local y desplegado. No uses una `service_role` key
+en el cliente. Reinicia `npm start` después de cambiar las variables.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
