@@ -2,17 +2,6 @@ import * as api from "./api";
 
 import { zxcvbn } from "./zxcvbnConfig.js";
 
-// Contraseñas demasiado comunes (se comparan en minúsculas)
-const PASSWORDS_INSEGURAS = [
-  "12345678",
-  "qwertyui",
-  "12345678",
-  "abcdefgh",
-  "0987654321",
-  "09876543",
-  "asdfghjk",
-];
-
 // Valida una contraseña NUEVA. Devuelve { ok, error }
 // (mismo formato que la API, así el resto del código lo trata igual)
 function validarPassword(password) {
