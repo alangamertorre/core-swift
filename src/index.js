@@ -271,6 +271,7 @@ document.addEventListener("click", (evento) => {
   } else return;
 });
 
+
 // CSS cursor — versión corregida
 {
   function updateCardEffect(element, mouseX, mouseY) {

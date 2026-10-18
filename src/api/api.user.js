@@ -34,6 +34,7 @@ export class User {
     this.email = email;
     this.password = password;
     this.name = name;
+    this.auth_provider = null;
     this.data = null; // datos del usuario tras login/get
   }
 
@@ -54,9 +55,18 @@ export class User {
   // sabe si la contraseña es correcta.
   async logIn() {
     const r = await api.managerUser("login", this.user_name, {
+      email: this.email,
       password: this.password,
     });
-    if (r.ok) this.data = r.data; // el login ya devuelve los datos del usuario
+
+    if (r.ok) {
+      this.data = r.data;
+      if (this.data.auth_provider) {
+        this.auth_provider = this.data.auth_provider;
+        this.updateIUauthProvider();
+      }
+    }
+
     return r;
   }
 
@@ -64,6 +74,7 @@ export class User {
   async getUser() {
     const r = await api.managerUser("get", this.user_name);
     if (r.ok) this.data = r.data;
+    this.updateIUauthProvider(); // usa this.auth_provider, que nunca se actualizó desde this.data
     return r;
   }
 
@@ -91,5 +102,19 @@ export class User {
     });
     if (r.ok) this.data = null;
     return r;
+  }
+
+  //IU auth provider
+  updateIUauthProvider() {
+    const div = document.querySelectorAll(".user-system-account-form");
+    div.forEach((e) => {
+      if (this.auth_provider === "google") {
+        e.style.display = "none";
+      } else if (this.auth_provider === null) {
+        e.style.display = "none";
+      } else {
+        e.style.display = "flex";
+      }
+    });
   }
 }

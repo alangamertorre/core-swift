@@ -22,6 +22,7 @@ export default function UserSistem({ onClose }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [deletePassword, setDeletePassword] = useState("");
+  const [acceptedPolicy, setAcceptedPolicy] = useState(false);
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const googleAuthConfigured = isGoogleAuthConfigured();
@@ -66,6 +67,14 @@ export default function UserSistem({ onClose }) {
 
   async function handleLogin(event) {
     event.preventDefault();
+    if (!acceptedPolicy) {
+      setStatus({
+        type: "error",
+        message: "Debes aceptar la política de privacidad y condiciones.",
+      });
+      return;
+    }
+
     setLoading(true);
     setStatus(null);
 
@@ -108,6 +117,14 @@ export default function UserSistem({ onClose }) {
 
   async function handleRegister(event) {
     event.preventDefault();
+    if (!acceptedPolicy) {
+      setStatus({
+        type: "error",
+        message: "Debes aceptar la política de privacidad y condiciones.",
+      });
+      return;
+    }
+
     setLoading(true);
     setStatus(null);
 
@@ -365,7 +382,7 @@ export default function UserSistem({ onClose }) {
                 autoComplete="username"
                 className="user-system-login-username"
                 name="user_name"
-                placeholder="INSERTE SU NOMBRE DE USUARIO..."
+                placeholder="NOMBRE DE USUARIO O EMAIL..."
                 required
                 type="text"
               />
@@ -468,6 +485,29 @@ export default function UserSistem({ onClose }) {
             </p>
           )}
         </>
+      )}
+
+      {!currentUser && (
+        <div className="user-system-policy-consent">
+          <label className="user-system-policy-checkbox-label">
+            <input
+              checked={acceptedPolicy}
+              className="user-system-policy-checkbox"
+              onChange={(event) => setAcceptedPolicy(event.target.checked)}
+              required
+              type="checkbox"
+            />
+            <span>Acepto la política de privacidad y condiciones</span>
+          </label>
+          <a
+            className="user-system-policy-link"
+            href="https://core-swift.vercel.app/policity-and-privacity.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Leer política y condiciones
+          </a>
+        </div>
       )}
 
       {status && (

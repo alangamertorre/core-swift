@@ -1486,6 +1486,52 @@
   font-size: 12px;
 }
 
+.user-system-policy-consent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.user-system-policy-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-text);
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.user-system-policy-checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-text);
+  flex: 0 0 auto;
+}
+
+.user-system-policy-link {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: 1px solid var(--color-text-muted);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  font-size: 12px;
+  text-align: center;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.user-system-policy-link:hover {
+  background-color: var(--color-text);
+  color: var(--color-text-inverse);
+}
+
 .user-system-status-error {
   color: #b42318;
 }
