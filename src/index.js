@@ -22,7 +22,7 @@ import NoticiasHero from "./components/noticias/noticiasHero";
 import NoticiasFeatures from "./components/noticias/noticiasFeatures";
 
 //Api
-import { descargar } from "./api/api";
+import "./api/api";
 import "./api/api.user";
 import "./api/api.productos";
 
