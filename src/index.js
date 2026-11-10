@@ -271,7 +271,6 @@ document.addEventListener("click", (evento) => {
   } else return;
 });
 
-
 // CSS cursor — versión corregida
 {
   function updateCardEffect(element, mouseX, mouseY) {
@@ -331,7 +330,7 @@ function downloadSection() {
 
     rootDescargas.render(
       <StrictMode>
-        <ProductosDownload />
+        <ProductosDownload key={id_producto} productId={id_producto} />
       </StrictMode>,
     );
 
@@ -342,52 +341,7 @@ function downloadSection() {
       });
     }, 50);
 
-    //Menú
-    setTimeout(() => {
-      const img_btnMenu = document.querySelector(".dropdown-icon");
-      const menu = document.querySelector(".version-list");
-      const mainText = document.querySelector(".dropdown-text");
-      const listText = document.querySelectorAll(".version-item");
-
-      if (img_btnMenu) {
-        img_btnMenu.addEventListener("click", () => {
-          const img = img_btnMenu.querySelector("img");
-          if (img_btnMenu.dataset.rotate === "0deg") {
-            img_btnMenu.dataset.rotate = "180deg";
-            img.style.transform = "rotate(180deg)";
-            openMenu(true);
-          } else if (img_btnMenu.dataset.rotate === "180deg") {
-            img_btnMenu.dataset.rotate = "0deg";
-            img.style.transform = "rotate(0deg)";
-            openMenu(false);
-          }
-        });
-      }
-
-      if (listText && mainText) {
-        listText.forEach((e) => {
-          e.addEventListener("click", () => {
-            const text = e.textContent;
-            const text_mainText = mainText.textContent.slice(9);
-            //Item
-            e.textContent = text_mainText;
-            //Main
-            mainText.textContent = `INSTALAR ${text}`;
-          });
-        });
-
-        //Descargar installer
-        mainText.addEventListener("click", async () => {
-          const version = mainText.textContent.slice(9).toLowerCase();
-          await descargar(id_producto, version);
-        });
-      }
-
-      //Abrir / cerrar menú
-      const openMenu = (open) => {
-        menu.style.display = open ? "flex" : "none";
-      };
-    }, 10);
+    // Menú: la lógica de apertura/cierre se controla desde ProductosDownload.
   });
 }
 

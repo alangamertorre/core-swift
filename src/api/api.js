@@ -93,7 +93,7 @@ export async function descargar(producto, version) {
   if (!so) return alert("Sistema operativo no soportado");
 
   const r = await managerProductos(producto, so, version);
-  if (r.ok) window.location.href = r.data.url;
+  if (r.ok) return r.data;
   else alert(r.error);
 }
 

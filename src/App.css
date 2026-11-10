@@ -62,8 +62,6 @@
   transition: transform .2s ease;
   cursor: pointer;
   box-shadow: var(--shadow-1);
-
-
 }
 
 .btn-primary {
@@ -336,8 +334,6 @@
   gap: 20px;
   box-shadow: 0 4px 15px 3px rgba(0, 0, 0, .07);
   transition: transform .35s ease-in-out;
-
-
 }
 
 .testimonial-card:hover {
@@ -432,8 +428,6 @@
 .action-buttons {
   display: flex;
   gap: 16px;
-
-
 }
 
 .btn-action-primary,
@@ -441,8 +435,6 @@
   padding: 18px 40px;
   border-radius: var(--radius-md);
   font-weight: 600;
-
-
 }
 
 .btn-action-primary {
@@ -679,8 +671,29 @@
   user-select: none;
 }
 
-.product-card:hover {
+.btn-download {
+  background-color: var(--bg-deafult);
+  box-sizing: border-box;
+  box-shadow: var(--shadow-1);
+  color: var(--color-surface);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-main);
+  font-size: 20px;
+  padding: 20px 0;
+  transition: transform .3s ease-in-out,
+    box-shadow .3s ease;
+}
+
+.product-card:hover,
+.btn-download:hover {
   transform: translateY(-10px);
+  box-shadow: var(--shadow-2);
+}
+
+.product-card:active,
+.btn-download:active {
+  transform: scale(0.9);
   box-shadow: var(--shadow-2);
 }
 
@@ -996,7 +1009,7 @@
   display: none;
   flex-direction: column;
   gap: 10px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease-in-out, opacity .2s ease;
 }
 
 .version-item {

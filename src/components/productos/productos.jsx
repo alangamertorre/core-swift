@@ -1,20 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import ProductCard from './productcard';
+import { getProductos } from '../../api/api.productos';
 
 export default function Productos() {
+    const [productos, setProductos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let mounted = true;
+
+        const loadProductos = async () => {
+            try {
+                window.instancesProductos = await getProductos();
+                if (mounted) {
+                    setProductos(window.instancesProductos);
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+            } finally {
+                if (mounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadProductos();
+
+        return () => {
+            mounted = false;
+        };
+    }, []);
+
     return (
         <div className="productos-page">
             <div className="container-max-width products-wrapper">
                 <div className="products-grid">
-                    <div className="product-card" data-producto="1">
-                        <div className="card-icon">
-                            <img src="/noticias/icon-1.png" alt="Alias Studio Code" />
-                        </div>
-                        <h2 className="card-title">Alias Studio Code</h2>
-
-                        <p className="card-subtitle"><code> Instalar⬇ </code></p>
-                    </div>
+                    {loading ? (
+                        <p className="card-subtitle">Cargando productos...</p>
+                    ) : (
+                        productos.map((producto) => (
+                            <ProductCard
+                                key={producto?.id ?? producto?.raw_name ?? producto?.name}
+                                product={producto}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>
-    )
+    );
 }

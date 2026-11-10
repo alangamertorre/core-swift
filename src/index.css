@@ -48,7 +48,7 @@ body {
   --space-10: 40px;
   --space-section: clamp(48px, 8vw, 120px);
   --page-gutter: clamp(16px, 5.56vw, 80px);
-  --content-width: 1440px;
+  --content-width: 100%;
 
   --shadow-1: 0 4px 15px 3px rgba(0, 0, 0, .25);
   --shadow-2: 0 8px 20px 5px rgba(0, 0, 0, .15);

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Markdown por Enlace</title>
+
+    <!-- Estilos CSS -->
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --accent-color: #2563eb;
+            --code-bg: #f3f4f6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Estilos para el contenido Markdown renderizado */
+        .markdown-body h1,
+        .markdown-body h2,
+        .markdown-body h3 {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.3em;
+            margin-top: 1.5em;
+        }
+
+        .markdown-body pre {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .markdown-body code {
+            background-color: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 85%;
+        }
+
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .markdown-body blockquote {
+            border-left: 4px solid var(--accent-color);
+            margin: 0;
+            padding-left: 1rem;
+            color: #4b5563;
+        }
+
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .markdown-body th,
+        .markdown-body td {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            text-align: left;
+        }
+
+        .markdown-body th {
+            background-color: var(--code-bg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Contenedor donde se inyectará el Markdown procesado -->
+        <div id="markdown-viewer" class="markdown-body">
+            <p>Cargando archivo desde la web...</p>
+        </div>
+    </div>
+
+    <!-- Importar librerías externas vía CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+
+    <!-- Módulo de JavaScript -->
+    <script type="module">
+        /**
+         * Renderiza un archivo Markdown desde un enlace web.
+         * @param {string} webUrl - Enlace web completo hacia el archivo .md
+         * @param {string} elementId - ID del contenedor HTML.
+         */
+        async function renderMarkdownFromUrl(webUrl, elementId) {
+            const container = document.getElementById(elementId);
+
+            try {
+                // Usamos un proxy CORS público para evitar bloqueos del navegador en peticiones cross-origin
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(webUrl)}`;
+
+                const response = await fetch(proxyUrl);
+                if (!response.ok) {
+                    throw new Error(`No se pudo acceder al enlace (Error ${response.status})`);
+                }
+
+                const markdownText = await response.text();
+
+                // 1. Convertir Markdown a HTML usando 'marked'
+                const rawHtml = marked.parse(markdownText);
+
+                // 2. Sanitizar el HTML por seguridad usando 'DOMPurify'
+                const cleanHtml = DOMPurify.sanitize(rawHtml);
+
+                // 3. Inyectar en el DOM
+                container.innerHTML = cleanHtml;
+
+            } catch (error) {
+                console.error("Error al renderizar Markdown:", error);
+                container.innerHTML = `<p style="color: #dc2626;"><strong>Error:</strong> No se pudo cargar el archivo Markdown desde el enlace proporcionado. (${error.message})</p>`;
+            }
+        }
+
+        // ==========================================
+        // Coloca aquí el enlace web directo a tu archivo .md
+        // ==========================================
+        const params = new URLSearchParams(window.location.search);
+
+        // 2. Extraer el valor del parámetro "url" (ej: /?md-url=https://mi-web.com/archivo.md)
+        const mdUrl = params.get('md-url');
+
+        if (mdUrl) {
+            // Si el usuario pasó una URL, la usamos para renderizar
+            renderMarkdownFromUrl(mdUrl, 'markdown-viewer');
+        }
+    </script>
+
+</body>
+
+</html>
